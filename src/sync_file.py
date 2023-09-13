@@ -30,14 +30,14 @@ class SyncFile:
         if not os.path.exists(self.destination_file):
             return True
         else:
-            with open(self.destination_file, 'rb') as dest_file:
+            with open(self.destination_file, "rb") as dest_file:
                 while True:
                     content_chunk_size = dest_file.read(self.chunk_size)
                     if not content_chunk_size:
                         break
                     md5_destination.update(content_chunk_size)
 
-        with open(self.source_file, 'rb') as src_file:
+        with open(self.source_file, "rb") as src_file:
             while True:
                 content_chunk_size = src_file.read(self.chunk_size)
                 if not content_chunk_size:
@@ -58,8 +58,8 @@ class SyncFile:
         if not self._must_sync():
             return True
         try:
-            with open(self.source_file, 'rb') as src_file:
-                with open(self.destination_file, 'wb') as dest_file:
+            with open(self.source_file, "rb") as src_file:
+                with open(self.destination_file, "wb") as dest_file:
                     while True:
                         content_chunk_size = src_file.read(self.chunk_size)
                         if not content_chunk_size:
@@ -68,13 +68,17 @@ class SyncFile:
             logger.info(f"File {self.filename} synced")
 
         except Exception as e:
-            logger.error(f"Error while syncing file {self.source_file} to {self.destination_file}, {e}")
+            logger.error(
+                f"Error while syncing file {self.source_file} to {self.destination_file}, {e}"
+            )
             return False
 
         if not self._must_sync():
             return True
         else:
-            logger.error(f"Error file {self.filename} source/destination not identical after copying, try rollback")
+            logger.error(
+                f"Error file {self.filename} source/destination not identical after copying, try rollback"
+            )
             try:  # Try to remove the file
                 os.remove(self.destination_file)
             except:
